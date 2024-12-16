@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>Gestion de Estudiantes
+    <div class="container">
+        <h1>Gestion de Estudiantes</h1>
+        <h2>Descripcion</h2>
+        <p>Este es un programa para gestionar la informacion en una escuela. Cada estudiante tiene la siguiente informacion</p>
+        <ul>
+            <li>Nombre</li>
+            <li>Edad</li>
+            <li>Calificaciones</li>
+        </ul>
+        <br>
+        <h3>Funciones</h3>
+        <button id="mostrarPromedios">Mostrar promedio</button>
+        <br>
+        <button id="mostrarDestacados">Mostrar Destacados</button>
+        <br>
+        <input type="text" id="buscarNombre" placeholder="Ingrese el nombre">
+        <button id="buscarEstudiante">Buscar</button>
+        <h3>Resultados</h3>
+        <div id="resultados"></div>
+    </div>
+</body>
+</html>
+<script>
+    const estudiantes=[
+        {nombre:"Ana", edad:18, calificaciones:[8,9,7]},
+        {nombre:"Luis", edad:20, calificaciones:[5,6,4]},
+        {nombre:"Maria", edad:19, calificaciones:[9,9,10]},
+        {nombre:"Carlos", edad:21, calificaciones:[6,7,5]},
+        {nombre:"Sofia", edad:18, calificaciones:[10,10,9]}
+    ];
+    //Mostar promedios
+    document.getElementById("mostrarPromedios").addEventListener("click", () => {
+            let resultadosPromedios = `<h3>Promedios:</h3>`;
+            estudiantes.forEach(estudiante => {
+                if (estudiante.calificaciones && estudiante.calificaciones.length > 0) {
+                    let suma = 0;
+                    estudiante.calificaciones.forEach(calificacion => {
+                        suma += calificacion;
+                    });
+                    const promedio = suma / estudiante.calificaciones.length;
+                    resultadosPromedios += `<p>${estudiante.nombre}: ${promedio.toFixed(2)}</p>`;
+                }
+            });
+            document.getElementById("resultados").innerHTML = resultadosPromedios;
+        });
+
+    //Mostrar Destacados
+    document.getElementById("mostrarDestacados").addEventListener("click", () => {
+        let destacadosScript=`<h3>Estudientes destacados</h3>`;
+        let encontrados=false;
+
+        estudiantes.forEach(estudiante => {
+            let suma=0;
+            estudiante.calificaciones.forEach(calificacion => {
+                suma +=calificacion;
+            });
+
+            const promedio = suma/estudiante.calificaciones.length;
+            if(promedio >= 9){
+                destacadosScript += `<p>${estudiante.nombre}</p>`;
+                encontrados = true;
+            }
+        });
+
+        if(!encontrados){
+            destacadosScript += `<p>Ninguno</p>`;
+        }
+        document.getElementById("resultados").innerHTML=destacadosScript;
+    });  
+
+    //Buscar estudiantes
+    document.getElementById("buscarEstudiante").addEventListener("click",() =>{
+        const nombre=document.getElementById("buscarNombre").value.toLowerCase();
+        let estudianteEncontrado = null;
+        estudiantes.forEach(estudiante => {
+            if(estudiante.nombre.toLowerCase() === nombre){
+                estudianteEncontrado=estudiante;
+            }
+        });
+
+        let estudianteScript="";
+        if(estudianteEncontrado){
+             estudianteScript = `<h3>Informacion del estudiante ${estudianteEncontrado.nombre} :</h3>`;
+             estudianteScript += `<p>Edad :${estudianteEncontrado.edad}</p>`;
+             estudianteScript += `<p>Calificaciones: ${estudianteEncontrado.calificaciones.join(" ,")}</P>`
+        }
+        else{
+            estudianteScript=`<p>No se encontro el estudiante ingresado intente nuevamente</p>`
+        }
+        document.getElementById("resultados").innerHTML =estudianteScript;
+    });
+
+
+</script>
